@@ -17,7 +17,14 @@ export async function node(
   node.use(bodyParser.json());
 
   // TODO implement this
-  // this route allows retrieving the current status of the node
+  app.get('/status', (req, res) => {
+    if (node.isFaulty) { // Assuming isFaulty is a property to check if node is faulty
+        res.status(500).send({ message: 'faulty' });
+    } else {
+        res.status(200).send({ message: 'live' });
+    }
+});
+
   // node.get("/status", (req, res) => {});
 
   // TODO implement this
@@ -34,7 +41,15 @@ export async function node(
 
   // TODO implement this
   // get the current state of a node
-  // node.get("/getState", (req, res) => {});
+  app.get('/getState', (req, res) => {
+    res.json({
+        killed: node.killed, // Assuming these are properties of your node object
+        x: node.x,
+        decided: node.decided,
+        k: node.k,
+    });
+});
+
 
   // start the server
   const server = node.listen(BASE_NODE_PORT + nodeId, async () => {
