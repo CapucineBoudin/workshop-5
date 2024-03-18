@@ -15,62 +15,36 @@ export async function node(
   const node = express();
   node.use(express.json());
   node.use(bodyParser.json());
-  const express = require('express');
-const bodyParser = require('body-parser');
 
-class Node {
-    constructor(initialState) {
-        this.state = { 
-            killed: initialState.killed || false,
-            x: initialState.x || null,
-            decided: initialState.decided || null,
-            k: initialState.k || null,
-        };
-        this.app = express();
-        this.app.use(bodyParser.json());
-        this.setupRoutes();
-    }
+  // TODO implement this
+  // this route allows retrieving the current status of the node
+  // node.get("/status", (req, res) => {});
 
-    setupRoutes() {
-        this.app.get('/status', (req, res) => {
-            if (this.state.killed) {
-                res.status(500).send('faulty');
-            } else {
-                res.status(200).send('live');
-            }
-        });
+  // TODO implement this
+  // this route allows the node to receive messages from other nodes
+  // node.post("/message", (req, res) => {});
 
-        this.app.get('/getState', (req, res) => {
-            res.status(200).json(this.state);
-        });
+  // TODO implement this
+  // this route is used to start the consensus algorithm
+  // node.get("/start", async (req, res) => {});
 
-        this.app.post('/message', (req, res) => {
-            const message = req.body;
-            console.log('Received message:', message);
-            // Add your logic here to handle the message according to the Ben-Or algorithm
-            res.status(200).send({ message: 'Message received' });
-        });
+  // TODO implement this
+  // this route is used to stop the consensus algorithm
+  // node.get("/stop", async (req, res) => {});
 
-        this.app.get('/start', (req, res) => {
-            // Implement the logic to start the Ben-Or algorithm
-            console.log('Node started');
-            res.status(200).send('Node started');
-        });
+  // TODO implement this
+  // get the current state of a node
+  // node.get("/getState", (req, res) => {});
 
-        this.app.get('/stop', (req, res) => {
-            this.state.killed = true;
-            // Implement any cleanup or state reset necessary when stopping the node
-            console.log('Node stopped');
-            res.status(200).send('Node stopped');
-        });
-    }
+  // start the server
+  const server = node.listen(BASE_NODE_PORT + nodeId, async () => {
+    console.log(
+      `Node ${nodeId} is listening on port ${BASE_NODE_PORT + nodeId}`
+    );
 
-    start(port) {
-        this.app.listen(port, () => {
-            console.log(`Node listening on port ${port}`);
-        });
-    }
+    // the node is ready
+    setNodeIsReady(nodeId);
+  });
+
+  return server;
 }
-
-module.exports = Node;
-
